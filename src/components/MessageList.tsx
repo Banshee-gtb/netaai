@@ -4,9 +4,6 @@ import { Sparkles, Copy, RotateCcw } from 'lucide-react';
 import type { Message } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/stores/authStore';
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface MessageListProps {
   messages: Message[];
@@ -90,7 +87,7 @@ export function MessageList({ messages, isLoading, streamingContent, onRegenerat
               )}
               
               <div className="flex-1 min-w-0">
-                <div className="prose prose-sm dark:prose-invert max-w-none break-words">
+                <div className="text-[15px] leading-7 text-gray-900 dark:text-gray-100">
                   {message.image_url && (
                     <img
                       src={message.image_url}
@@ -98,29 +95,9 @@ export function MessageList({ messages, isLoading, streamingContent, onRegenerat
                       className="rounded-xl max-w-full h-auto mb-4"
                     />
                   )}
-                  <ReactMarkdown
-                    components={{
-                      code({ node, inline, className, children, ...props }: any) {
-                        const match = /language-(\w+)/.exec(className || '');
-                        return !inline && match ? (
-                          <SyntaxHighlighter
-                            style={vscDarkPlus}
-                            language={match[1]}
-                            PreTag="div"
-                            {...props}
-                          >
-                            {String(children).replace(/\n$/, '')}
-                          </SyntaxHighlighter>
-                        ) : (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        );
-                      },
-                    }}
-                  >
+                  <div className="whitespace-pre-wrap break-words">
                     {message.content}
-                  </ReactMarkdown>
+                  </div>
                 </div>
                 
                 {message.role === 'assistant' && (
@@ -159,8 +136,8 @@ export function MessageList({ messages, isLoading, streamingContent, onRegenerat
                 <Sparkles className="w-5 h-5 text-black" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="prose prose-sm dark:prose-invert max-w-none break-words">
-                  <ReactMarkdown>{streamingContent}</ReactMarkdown>
+                <div className="text-[15px] leading-7 text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
+                  {streamingContent}
                 </div>
               </div>
             </div>
