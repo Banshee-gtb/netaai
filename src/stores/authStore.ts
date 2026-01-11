@@ -1,0 +1,27 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { AuthUser } from '@/types';
+
+interface AuthState {
+  user: AuthUser | null;
+  loading: boolean;
+  login: (user: AuthUser) => void;
+  logout: () => void;
+  setLoading: (loading: boolean) => void;
+}
+
+export const useAuth = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      loading: true,
+      login: (user) => set({ user, loading: false }),
+      logout: () => set({ user: null, loading: false }),
+      setLoading: (loading) => set({ loading }),
+    }),
+    {
+      name: 'neta-auth',
+      partialize: (state) => ({ user: state.user }),
+    }
+  )
+);
