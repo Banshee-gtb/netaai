@@ -42,7 +42,10 @@ export function ChatPage() {
     }
   }, [theme]);
 
-
+  // Load chats on mount
+  useEffect(() => {
+    loadChats();
+  }, []);
 
   useEffect(() => {
     if (currentChat) {
@@ -51,6 +54,20 @@ export function ChatPage() {
       setMessages([]);
     }
   }, [currentChat]);
+
+  const loadChats = async () => {
+    try {
+      const data = await chatApi.getChats();
+      useChat.getState().setChats(data);
+      // Set first chat as current if exists
+      if (data.length > 0 && !currentChat) {
+        setCurrentChat(data[0]);
+      }
+    } catch (error: any) {
+      console.error('Failed to load chats:', error);
+      // Don't show error toast for new users with no chats
+    }
+  };
 
   const loadMessages = async () => {
     if (!currentChat) return;
