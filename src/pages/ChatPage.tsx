@@ -42,9 +42,12 @@ export function ChatPage() {
     }
   }, [theme]);
 
-  // Load chats on mount
+  // Load chats on mount (with slight delay for profile creation)
   useEffect(() => {
-    loadChats();
+    const timer = setTimeout(() => {
+      loadChats();
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
