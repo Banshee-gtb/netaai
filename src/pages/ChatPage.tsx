@@ -42,13 +42,12 @@ export function ChatPage() {
     }
   }, [theme]);
 
-  // Load chats on mount (with delay to ensure user profile is ready)
+  // Load chats on mount
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (user) {
       loadChats();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (currentChat) {
@@ -62,13 +61,15 @@ export function ChatPage() {
     try {
       const data = await chatApi.getChats();
       useChat.getState().setChats(data);
-      // Set first chat as current if exists
+      // Set first chat as current if exists and no chat is selected
       if (data.length > 0 && !currentChat) {
         setCurrentChat(data[0]);
       }
     } catch (error: any) {
       console.error('Failed to load chats:', error);
       // Don't show error toast for new users with no chats
+      // But ensure we can still create new chats
+      useChat.getState().setChats([]);
     }
   };
 
