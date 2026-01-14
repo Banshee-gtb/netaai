@@ -8,8 +8,7 @@ export default defineConfig({
     host: "::",
     port: 8080,
     hmr: {
-      clientPort: 443,
-      protocol: 'wss',
+      overlay: false, // Disable error overlay to prevent WebSocket issues in preview
     },
   },
   plugins: [
