@@ -7,9 +7,7 @@ export default defineConfig({
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      overlay: false, // Disable error overlay to prevent WebSocket issues in preview
-    },
+    hmr: false, // Completely disable HMR for preview environment
   },
   plugins: [
     react(),
